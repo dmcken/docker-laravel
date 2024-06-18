@@ -10,20 +10,6 @@ services:
         ports:
             - 80:80
             # - 443:443
-    mysql:
-        image: mysql:8.0.30
-        platform: linux/amd64
-        container_name: mysql
-        ports:
-            - 3306:3306
-        volumes:
-            - ./mysql:/var/lib/mysql
-    composer:
-        image: composer:latest
-        container_name: composer
-        volumes:
-            - ./src:/var/www/html
-        working_dir: /var/www/html
     artisan:
         build:
             context: .
@@ -33,7 +19,26 @@ services:
             - ./src:/var/www/html
         working_dir: /var/www/html
         entrypoint: ['php', 'artisan']
+    mysql:
+        image: mysql:8.0.30
+        platform: linux/amd64
+        container_name: mysql
+        ports:
+            - 3306:3306
+        volumes:
+            - ./mysql:/var/lib/mysql
+        env_file:
+            - .env
+    composer:
+        user: "1000:1000"
+        image: composer:latest
+        container_name: composer
+        volumes:
+            - ./src:/var/www/html
+        working_dir: /var/www/html
+
     npm:
+        user: "1000:1000"
         image: node:current-alpine
         container_name: npm
         volumes:
