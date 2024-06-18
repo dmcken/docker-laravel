@@ -8,7 +8,6 @@ services:
             - "./src:/var/www/html"
         ports:
             - 80:80
-            # - 443:443
     artisan:
         build:
             context: .
