@@ -19,3 +19,6 @@ docker compose run --rm php /bin/sh
 # Followed by:
 chown -R laravel:laravel /var/www/html
 ```
+
+
+Originally forked from: vshloda/docker-laravel
