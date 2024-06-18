@@ -1,4 +1,4 @@
 MYSQL_DATABASE: laraveldb
 MYSQL_USER: laravel
-MYSQL_PASSWORD: secret
+MYSQL_PASSWORD: laravelsecret
 MYSQL_ROOT_PASSWORD: rootsecret
