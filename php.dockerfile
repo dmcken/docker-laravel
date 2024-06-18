@@ -1,4 +1,4 @@
-FROM php:8.1.10-apache-bullseye
+FROM php:8.2.20-apache-bullseye
 
 # ADD ./php/www.conf /usr/local/etc/php-fpm.d/www.conf
 RUN useradd --user-group laravel
