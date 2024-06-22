@@ -1,3 +1,4 @@
+# PHP with apache on Debian 11
 FROM php:8.2.20-apache-bullseye
 
 RUN useradd --user-group laravel
