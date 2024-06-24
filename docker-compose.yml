@@ -1,46 +1,83 @@
 services:
-    php:
-        build:
-            context: .
-            dockerfile: php.dockerfile
-        container_name: php
-        volumes:
-            - "./src:/var/www/html"
-        ports:
-            - 80:80
-    artisan:
-        build:
-            context: .
-            dockerfile: php.dockerfile
-        container_name: artisan
-        volumes:
-            - ./src:/var/www/html
-        working_dir: /var/www/html
-        entrypoint: ['php', 'artisan']
+    # Database 
     mysql:
         image: mysql:8.0.30
         platform: linux/amd64
         container_name: mysql
+        restart: unless-stopped
         ports:
             - 3306:3306
         volumes:
             - ./mysql:/var/lib/mysql
         env_file:
             - .env
+    phpmyadmin:
+        # https://hub.docker.com/_/phpmyadmin
+        image: phpmyadmin:latest
+        container_name: phpmyadmin
+        restart: unless-stopped
+        ports:
+            - 8080:80
+        environment:
+            - PMA_HOST=mysql
+        env_file:
+            - .env
+        depends_on:
+            - mysql
+
+    # Core application
+    php:
+        build:
+            context: .
+            dockerfile: php.dockerfile
+        container_name: php
+        restart: no
+        volumes:
+            - "./src:/var/www/html"
+        ports:
+            - 80:80
+    npm:
+        user: "1000:1000"
+        image: node:current-alpine
+        restart: no
+        volumes:
+            - ./src:/var/www/html
+        working_dir: /var/www/html
+        entrypoint: ['npm','run','dev']
+        ports:
+            - 5173:5173
+    artisan:
+        build:
+            context: .
+            dockerfile: php.dockerfile
+        container_name: artisan
+        restart: no
+        volumes:
+            - ./src:/var/www/html
+        working_dir: /var/www/html
+        entrypoint: ['php', 'artisan','serve','--host=0.0.0.0']
+        ports:
+            - 8000:8000
+
+    # Helpers
     composer:
         user: "1000:1000"
         image: composer:latest
         container_name: composer
+        restart: no
         volumes:
             - ./src:/var/www/html
         working_dir: /var/www/html
-
-    npm:
+    node:
         user: "1000:1000"
         image: node:current-alpine
-        container_name: npm
+        restart: no
         volumes:
             - ./src:/var/www/html
         working_dir: /var/www/html
-        entrypoint: ['npm']
+        entrypoint: ['node']
+        # ports:
+        #     - 5173:5173
+
+
 
