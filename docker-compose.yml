@@ -1,3 +1,5 @@
+# Docker compose for laravel development
+
 services:
     # Database 
     mysql:
